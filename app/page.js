@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const PRODUCTS = [
   {
@@ -60,12 +60,10 @@ export default function Home() {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
-  useEffect(() => {
-    if (cardRef.current && !startedRef.current && angleRef.current === 90) {
-      cardRef.current.style.transform =
-        "translate(-50%, -50%) rotateY(90deg)";
-    }
-  });
+  useLayoutEffect(() => {
+    if (!cardRef.current || startedRef.current) return;
+    cardRef.current.style.transform = "translate(-50%, -50%) rotateY(90deg)";
+  }, []);
 
   useEffect(() => {
     const timers = [];
@@ -148,37 +146,41 @@ export default function Home() {
           </span>
 
           <span
-            className="relative shrink-0 overflow-visible bg-white transition-[width,height] duration-500 ease-[cubic-bezier(0.6,0,0,1)] [perspective:1200px]"
+            className="relative shrink-0 overflow-hidden bg-white transition-[width,height] duration-500 ease-[cubic-bezier(0.6,0,0,1)]"
             style={{
               width: cardOpen ? cardSize : 0,
               height: cardOpen ? cardSize : 0,
+              overflow: "hidden",
             }}
           >
-            <span
-              ref={cardRef}
-              className="absolute left-1/2 top-1/2 block bg-white [transform-style:preserve-3d]"
-              style={{
-                width: cardSize,
-                height: cardSize,
-              }}
-            >
-              <span className="absolute inset-0 flex items-center justify-center bg-white [backface-visibility:hidden]">
-                <img
-                  src={PRODUCTS[frontIndex].src}
-                  alt={PRODUCTS[frontIndex].alt}
-                  width={1200}
-                  height={1200}
-                  className="block h-full w-full rounded-[1.5px] bg-white object-contain"
-                />
-              </span>
-              <span className="absolute inset-0 flex items-center justify-center bg-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                <img
-                  src={PRODUCTS[backIndex].src}
-                  alt={PRODUCTS[backIndex].alt}
-                  width={1200}
-                  height={1200}
-                  className="block h-full w-full rounded-[1.5px] bg-white object-contain"
-                />
+            <span className="absolute inset-0 [perspective:1200px]">
+              <span
+                ref={cardRef}
+                className="absolute left-1/2 top-1/2 block bg-white [transform:translate(-50%,-50%)_rotateY(90deg)] [transform-style:preserve-3d]"
+                style={{
+                  width: cardSize,
+                  height: cardSize,
+                  visibility: cardOpen ? "visible" : "hidden",
+                }}
+              >
+                <span className="absolute inset-0 flex items-center justify-center bg-white [backface-visibility:hidden]">
+                  <img
+                    src={PRODUCTS[frontIndex].src}
+                    alt={PRODUCTS[frontIndex].alt}
+                    width={cardSize}
+                    height={cardSize}
+                    className="block h-full w-full rounded-[1.5px] bg-white object-contain"
+                  />
+                </span>
+                <span className="absolute inset-0 flex items-center justify-center bg-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                  <img
+                    src={PRODUCTS[backIndex].src}
+                    alt={PRODUCTS[backIndex].alt}
+                    width={cardSize}
+                    height={cardSize}
+                    className="block h-full w-full rounded-[1.5px] bg-white object-contain"
+                  />
+                </span>
               </span>
             </span>
           </span>
