@@ -132,8 +132,8 @@ const jsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="m-0 h-full overflow-hidden bg-white p-0 font-sans antialiased">
+    <html lang="en" className={`${geistSans.variable} h-dvh antialiased`}>
+      <body className="m-0 h-dvh overflow-hidden bg-white p-0 font-sans antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

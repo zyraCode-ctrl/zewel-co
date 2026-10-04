@@ -51,9 +51,10 @@ export default function Home() {
   const flippingRef = useRef(false);
   const startedRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const updateSize = () => {
-      setCardSize(window.innerWidth <= 768 ? 140 : 200);
+      const width = window.innerWidth;
+      setCardSize(width < 640 ? 136 : width < 1280 ? 172 : 200);
     };
     updateSize();
     window.addEventListener("resize", updateSize);
@@ -125,24 +126,25 @@ export default function Home() {
     };
   }, []);
 
+  const lineClass =
+    "flex items-center justify-center whitespace-nowrap text-[clamp(1.45rem,5.2vw,2.3rem)] leading-none tracking-[-0.04em] text-black";
+
   return (
-    <main className="relative flex h-screen min-h-screen w-full items-center justify-center overflow-hidden bg-white">
+    <main className="relative flex h-full w-full items-center justify-center overflow-hidden bg-white px-4">
       <section
         aria-label="Zevel and Co coming soon"
-        className="flex flex-col items-center justify-center gap-10"
+        className="flex flex-col items-center justify-center"
       >
-        <h1 className="m-0 flex items-center justify-center gap-1 font-normal">
-          <span className="flex h-[2.3rem] shrink-0 items-center gap-[0.6rem] max-md:h-[1.5rem] max-md:gap-2.5 max-sm:h-[1.35rem]">
+        <h1 className="m-0 flex w-full max-w-full flex-col items-center justify-center gap-3 text-center font-normal xl:w-auto xl:flex-row xl:gap-1">
+          <span className="flex flex-col items-center gap-2 sm:flex-row sm:gap-[0.6rem]">
             <img
               src="/logo.webp"
               alt="Zevel & Co."
               width={220}
               height={37}
-              className="block h-[2.3rem] w-auto object-contain max-md:h-[1.5rem] max-sm:h-[1.35rem]"
+              className="block h-[clamp(1.45rem,5.2vw,2.3rem)] w-auto object-contain"
             />
-            <span className="flex h-[2.3rem] shrink-0 items-center whitespace-nowrap text-[2.3rem] leading-none tracking-[-0.04em] text-black max-md:h-[1.5rem] max-md:text-[1.5rem] max-sm:h-[1.35rem] max-sm:text-[1.35rem]">
-              premium jewelry
-            </span>
+            <span className={lineClass}>premium jewelry</span>
           </span>
 
           <span
@@ -185,12 +187,9 @@ export default function Home() {
             </span>
           </span>
 
-          <span className="flex h-[2.3rem] shrink-0 items-center whitespace-nowrap text-[2.3rem] leading-none tracking-[-0.04em] text-black max-md:h-[1.5rem] max-md:text-[1.5rem] max-sm:h-[1.35rem] max-sm:text-[1.35rem]">
-            for the modern world
-          </span>
+          <span className={lineClass}>for the modern world</span>
         </h1>
-
-        <p className="m-0 text-[0.95rem] font-normal uppercase leading-none tracking-[0.35em] text-black opacity-45">
+        <p className="m-0 mt-5 text-center text-[0.8rem] font-normal uppercase leading-none tracking-[0.28em] text-black opacity-45 sm:text-[0.95rem] sm:tracking-[0.35em] xl:hidden">
           Coming Soon
         </p>
         <p className="sr-only">
@@ -199,6 +198,9 @@ export default function Home() {
           world.
         </p>
       </section>
+      <p className="absolute inset-x-0 bottom-10 m-0 hidden px-4 text-center text-[0.95rem] font-normal uppercase leading-none tracking-[0.35em] text-black opacity-45 xl:block">
+        Coming Soon
+      </p>
     </main>
   );
 }
